@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Insight Studio - Agentic AI Analytics</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+</head>
+
+<body>
+
+<div class="bg-grid"></div>
+
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+
+<div class="app-layout">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="logo">
+                AI
+            </div>
+
+            <div>
+
+                <h2>Insight Studio</h2>
+
+                <p>
+                    Agentic Analytics
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="menu">
+
+            <button class="nav-btn">
+                📤 Upload
+            </button>
+
+            <button class="nav-btn">
+                🧹 Clean
+            </button>
+
+            <button class="nav-btn">
+                📊 Charts
+            </button>
+
+            <button class="nav-btn">
+                🤖 ML Model
+            </button>
+
+            <button class="nav-btn">
+                🧠 AI Insights
+            </button>
+
+        </div>
+
+        <div class="status-card">
+
+            <h4>Pipeline Status</h4>
+
+            <div
+                id="statusBadge"
+                class="status idle"
+            >
+                Idle
+            </div>
+
+            <div class="progress">
+
+                <div
+                    id="progressBar"
+                ></div>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+    <!-- MAIN -->
+
+    <main class="main-content">
+
+        <!-- HERO -->
+
+        <section class="hero">
+
+            <div>
+
+                <span class="tag">
+                    Flask • ML • Agentic AI
+                </span>
+
+                <h1>
+                    AI Data Analytics Dashboard
+                </h1>
+
+                <p>
+                    Upload CSV, generate insights,
+                    create graphs, train ML models
+                    and chat with your data.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- UPLOAD -->
+
+        <section class="glass-card">
+
+            <div class="section-head">
+
+                <h2>Upload Dataset</h2>
+
+                <button
+                    class="ghost-btn"
+                    onclick="resetApp()"
+                >
+                    Reset
+                </button>
+
+            </div>
+
+            <label class="upload-box">
+
+                <input
+                    type="file"
+                    id="csvFile"
+                    accept=".csv"
+                    hidden
+                >
+
+                <h3>
+                    Upload CSV File
+                </h3>
+
+                <p id="fileName">
+                    No file selected
+                </p>
+
+            </label>
+
+            <button
+                class="primary-btn"
+                onclick="uploadCSV()"
+            >
+                Upload CSV
+            </button>
+
+            <div
+                id="datasetTitle"
+                class="dataset-title"
+            >
+                Dataset not uploaded
+            </div>
+
+            <div
+                id="metricGrid"
+                class="metric-grid"
+            >
+            </div>
+
+            <div
+                id="profile"
+                class="info-box"
+            >
+            </div>
+
+        </section>
+
+        <!-- PREPROCESS -->
+
+        <section class="glass-card">
+
+            <h2>
+                Data Preprocessing
+            </h2>
+
+            <button
+                class="primary-btn"
+                onclick="preprocess()"
+            >
+                Run Preprocessing
+            </button>
+
+            <div
+                id="preprocessResult"
+                class="info-box"
+            ></div>
+
+        </section>
+
+        <!-- FEATURES -->
+
+        <section class="glass-card">
+
+            <h2>
+                Feature Selection
+            </h2>
+
+            <label for="yCol">
+                Target Column
+            </label>
+
+            <select id="yCol"></select>
+
+            <div class="feature-top">
+
+                <span>
+                    X Features
+                </span>
+
+                <span id="featureCount">
+                    0 selected
+                </span>
+
+            </div>
+
+            <div class="button-row">
+
+                <button
+                    onclick="selectAllX()"
+                >
+                    Select All
+                </button>
+
+                <button
+                    onclick="autoSelectX()"
+                >
+                    Auto
+                </button>
+
+                <button
+                    onclick="clearX()"
+                >
+                    Clear
+                </button>
+
+            </div>
+
+            <div
+                id="xCols"
+                class="checkbox-grid"
+            >
+            </div>
+
+        </section>
+
+        <!-- CHARTS -->
+
+        <section class="glass-card">
+
+            <h2>
+                Visual Analytics
+            </h2>
+
+            <button
+                class="primary-btn"
+                onclick="makeCharts()"
+            >
+                Generate Charts
+            </button>
+
+            <div
+                id="insights"
+                class="pill-grid"
+            ></div>
+
+            <div
+                id="charts"
+                class="charts-grid"
+            ></div>
+
+        </section>
+
+        <!-- MODEL -->
+
+        <section class="glass-card">
+
+            <h2>
+                Machine Learning
+            </h2>
+
+            <button
+                class="primary-btn"
+                onclick="trainModel()"
+            >
+                Train Model
+            </button>
+
+            <div
+                id="modelSummary"
+                class="model-summary"
+            ></div>
+
+            <div
+                id="modelResult"
+                class="info-box"
+            ></div>
+
+            <div
+                id="suggestions"
+                class="suggestion-grid"
+            ></div>
+
+        </section>
+
+        <!-- AI -->
+
+        <section class="glass-card">
+
+            <h2>
+                AI Insights
+            </h2>
+
+            <button
+                class="primary-btn"
+                onclick="summary()"
+            >
+                Generate Summary
+            </button>
+
+            <div
+                id="summary"
+                class="ai-response"
+            ></div>
+
+            <div class="ask-row">
+
+                <input
+                    id="question"
+                    placeholder="Ask anything about dataset..."
+                >
+
+                <button
+                    class="primary-btn"
+                    onclick="ask()"
+                >
+                    Ask AI
+                </button>
+
+            </div>
+
+            <div
+                id="answer"
+                class="ai-response"
+            ></div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>
