@@ -59,21 +59,23 @@ def generate_charts(df, y_col=None):
     # Scatter Plot
     if len(numeric_cols) >= 2:
 
-        x = numeric_cols[0]
-
-        y = (
-            y_col
-            if y_col in numeric_cols
-            else numeric_cols[1]
-        )
+        y = y_col if y_col in numeric_cols else numeric_cols[1]
+        x = next((col for col in numeric_cols if col != y), numeric_cols[0])
 
         chart_df = df[[x, y]].dropna()
 
+        scatter_options = {
+            "x": x,
+            "y": y,
+            "title": f"{x} vs {y}"
+        }
+
+        if len(chart_df) >= 2:
+            scatter_options["trendline"] = "ols"
+
         fig = px.scatter(
             chart_df,
-            x=x,
-            y=y,
-            title=f"{x} vs {y}"
+            **scatter_options
         )
 
         charts.append({
